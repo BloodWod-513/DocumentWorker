@@ -16,7 +16,7 @@ namespace DocumentWorker.DTO.Model
     {
         [Required(ErrorMessage = "Слово не может быть пустым.")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Длина слова не менее 3 и не более 20 символов.")]
-        [RegularExpression(@"(^[а-яА-ЯеЁ]+$|^[a-zA-Z]+$)", ErrorMessage = "Слово должно быть написано полностью из кириллицы, либо полностью из латиницы.")]
+        [RegularExpression(@"(^[а-яА-ЯеЁё-]+$|^[a-zA-Z]+$)", ErrorMessage = "Слово должно быть написано полностью из кириллицы, либо полностью из латиницы.")]
         public string Text { get; private set; }
         public int CountWordInText { get; private set; }
         public WordInfo(string text) 

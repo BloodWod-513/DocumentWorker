@@ -62,7 +62,7 @@ namespace DocumentWorker.Tests
         [TestMethod]
         public void IsValidWord()
         {           
-            var isValid = _wordInfoModelValidator.IsValidModel(new WordInfo("Василий"));
+            var isValid = _wordInfoModelValidator.IsValidModel(new WordInfo("своём"));
 
             Assert.IsTrue(isValid);
         }
