@@ -1,5 +1,6 @@
 ﻿using DocumentWorker.Infrastructure.Validator.FileValidator;
 using DocumentWorker.Infrastructure.Validator.FileValidator.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,14 @@ namespace DocumentWorker.Infrastructure.Services
     public class TxtFileReaderWithValidationService : TxtFileReaderService
     {
         private readonly ITxtFileValidator _txtFileValidator;
+        private readonly ILogger<TxtFileReaderWithValidationService> _logger;
 
-        public TxtFileReaderWithValidationService()
+        public TxtFileReaderWithValidationService(ILogger<TxtFileReaderWithValidationService> logger,
+            ITxtFileValidator txtFileValidator)
         {
-            _txtFileValidator = new TxtFileValidator();
+            _logger = logger;
+            //_txtFileValidator = new TxtFileValidator();
+            _txtFileValidator = txtFileValidator;
         }
 
         public override IEnumerable<string> ReadLine(FileInfo fileInfo)
@@ -31,8 +36,8 @@ namespace DocumentWorker.Infrastructure.Services
             }
             else
             {
-                Console.WriteLine("Ошибка");
-                throw new Exception("Ошибочка при открытии файла");
+                _logger.LogError("Ошибка при открытии файла");
+                throw new Exception("Ошибка при открытии файла");
             }
         }
     }

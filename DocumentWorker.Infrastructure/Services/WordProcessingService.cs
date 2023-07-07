@@ -1,5 +1,7 @@
-﻿using DocumentWorker.DTO.Model;
+﻿using DocumentWorker.DTO.Data;
+using DocumentWorker.DTO.Model;
 using DocumentWorker.Infrastructure.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace DocumentWorker.Infrastructure.Services
 {
@@ -12,11 +14,15 @@ namespace DocumentWorker.Infrastructure.Services
     {
         private readonly ITxtFileReaderService _txtFileReaderService;
         private readonly IStringParserService _stringParserService;
+        private readonly ILogger<WordProcessingService> _logger;
 
-        public WordProcessingService() 
+        public WordProcessingService(ITxtFileReaderService txtFileReaderService,
+            IStringParserService stringParserService,
+            ILogger<WordProcessingService> logger) 
         {
-            _txtFileReaderService = new TxtFileReaderWithValidationService();
-            _stringParserService = new WordInfoParserWithValidationService<WordInfo>();
+            _txtFileReaderService = txtFileReaderService;
+            _stringParserService = stringParserService;
+            _logger = logger;
         }
 
         public Dictionary<string, WordInfo> GetWords(FileInfo fileInfo)
@@ -36,7 +42,7 @@ namespace DocumentWorker.Infrastructure.Services
             //TODO: кастомные екзепшены для валейдаторов
             catch (Exception ex)
             {
-                Console.WriteLine($"Возникла ошибка: {ex.Message}");
+                _logger.LogError($"Возникла ошибка: {ex.Message}");
             }
             return dict;
         }
@@ -56,8 +62,7 @@ namespace DocumentWorker.Infrastructure.Services
         {
             foreach (var (word, wordInfo) in dict)
             {
-                //TODO: убрать магическое число 4
-                if (wordInfo.CountWordInText < 4)
+                if (wordInfo.CountWordInText < Const.WordSetting.MIN_COUNT_WORD_IN_TEXT)
                     dict.Remove(word);
             }
         }

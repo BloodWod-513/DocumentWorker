@@ -1,9 +1,14 @@
 ﻿using DocumentWorker.DTO.Model;
+using DocumentWorker.Infrastructure.Services.Interfaces;
+using DocumentWorker.Infrastructure.Services;
 using DocumentWorker.Infrastructure.Validator.FileValidator;
 using DocumentWorker.Infrastructure.Validator.FileValidator.Interfaces;
 using DocumentWorker.Infrastructure.Validator.ModelValidator;
 using DocumentWorker.Infrastructure.Validator.ModelValidator.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
+using NLog.Extensions.Logging;
 
 namespace DocumentWorker.Tests
 {
@@ -13,11 +18,29 @@ namespace DocumentWorker.Tests
         private const string TestFolderPath = "TestFiles/";
         private readonly ITxtFileValidator _txtFileValidator;
         private readonly IModelValidator<WordInfo> _wordInfoModelValidator;
+        private readonly ITxtFileReaderService _fileReaderService;
+        private readonly ILogger<ValidatorsTest> _logger;
 
         public ValidatorsTest()
         {
-            _txtFileValidator = new TxtFileValidator();
-            _wordInfoModelValidator = new ModelValidator<WordInfo>();
+            #region Настройка DI
+            IServiceCollection services = new ServiceCollection();
+            services.AddTransient<ITxtFileReaderService, TxtFileReaderWithValidationService>();
+            services.AddTransient<ITxtFileValidator, TxtFileValidator>();
+            services.AddTransient(typeof(IStringParserService), typeof(WordInfoParserWithValidationService<WordInfo>));
+            services.AddTransient(typeof(IModelValidator<>), typeof(ModelValidator<>));
+            services.AddTransient<WordProcessingService>();
+            services.AddLogging(opt =>
+            {
+                opt.AddNLog();
+                opt.AddConsole();
+                opt.AddDebug();
+                opt.SetMinimumLevel(LogLevel.Debug);
+            });
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            _fileReaderService = serviceProvider.GetService<ITxtFileReaderService>();
+            _logger = serviceProvider.GetService<ILogger<ValidatorsTest>>();
+            #endregion
         }
 
         [TestMethod]

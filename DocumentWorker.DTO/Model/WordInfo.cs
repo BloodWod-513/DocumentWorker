@@ -1,11 +1,7 @@
 ﻿using DocumentWorker.DTO.Model.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using DocumentWorker.DTO.Data;
+using WordSetting = DocumentWorker.DTO.Data.Const.WordSetting;
 namespace DocumentWorker.DTO.Model
 {
     /// <summary>
@@ -15,7 +11,7 @@ namespace DocumentWorker.DTO.Model
     public class WordInfo : IModelValidation
     {
         [Required(ErrorMessage = "Слово не может быть пустым.")]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "Длина слова не менее 3 и не более 20 символов.")]
+        [StringLength(WordSetting.MAX_WORD_LEGTH, MinimumLength = WordSetting.MIN_WORD_LENGTH, ErrorMessage = "Длина слова не менее 3 и не более 20 символов.")]
         [RegularExpression(@"(^[а-яА-ЯеЁё-]+$|^[a-zA-Z]+$)", ErrorMessage = "Слово должно быть написано полностью из кириллицы, либо полностью из латиницы.")]
         public string Text { get; private set; }
         public int CountWordInText { get; private set; }

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using DocumentWorker.DTO.Model;
 using DocumentWorker.DTO.Model.Interfaces;
+using DocumentWorker.Infrastructure.Services;
 using DocumentWorker.Infrastructure.Validator.ModelValidator.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace DocumentWorker.Infrastructure.Validator.ModelValidator
 {
@@ -18,6 +20,11 @@ namespace DocumentWorker.Infrastructure.Validator.ModelValidator
     public class ModelValidator<T> : IModelValidator<T>
         where T : IModelValidation
     {
+        private readonly ILogger<WordProcessingService> _logger;
+        public ModelValidator(ILogger<WordProcessingService> logger) 
+        {
+            _logger = logger;
+        }
         public bool IsValidModel(T model)
         {
             if (model == null)
@@ -31,16 +38,17 @@ namespace DocumentWorker.Infrastructure.Validator.ModelValidator
 
             if (!System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, context, results, true))
             {
-                Console.WriteLine($"Объекту {model.GetType().Name} не удалось пройти валидацию.");
+                string errorMessages = "";
+                errorMessages += $"Объекту {model.GetType().Name} не удалось пройти валидацию. ";
                 foreach (var error in results)
                 {
-                    Console.WriteLine(error.ErrorMessage);
+                    errorMessages += $"{error.ErrorMessage} ";
                 }
-                Console.WriteLine();
+                _logger.LogError(errorMessages);
                 return false;
             }
             else
-                Console.WriteLine($"Объект {model.GetType().Name} успешно прошел валидацию.");
+                _logger.LogInformation($"Объект {model.GetType().Name} успешно прошел валидацию.");
 
             return true;
         }

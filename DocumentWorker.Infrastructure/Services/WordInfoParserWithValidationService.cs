@@ -1,5 +1,6 @@
 ﻿using DocumentWorker.DTO.Model;
 using DocumentWorker.DTO.Model.Interfaces;
+using DocumentWorker.Infrastructure.Services.Interfaces;
 using DocumentWorker.Infrastructure.Validator.ModelValidator;
 using DocumentWorker.Infrastructure.Validator.ModelValidator.Interfaces;
 using System;
@@ -15,12 +16,12 @@ namespace DocumentWorker.Infrastructure.Services
     /// Слова, которые вернул парсинг проходят валидацию в соотвествии с атрибутами модели WordInfo
     /// </summary>
     public class WordInfoParserWithValidationService<T> : StringIntoSingleWordParserService
-        where T : class, IModelValidation
+        where T : WordInfo
     {
         private readonly IModelValidator<T> _modelValidator;
-        public WordInfoParserWithValidationService()
+        public WordInfoParserWithValidationService(IModelValidator<T> modelValidation)
         {
-            _modelValidator = new ModelValidator<T>();
+            _modelValidator = modelValidation;
         }
 
         public override IEnumerable<string> Parse(string str)
