@@ -40,9 +40,6 @@
     <None Update="TestFiles\testless100mb.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\testover100mb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="TestFiles\UTF-8 file.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
