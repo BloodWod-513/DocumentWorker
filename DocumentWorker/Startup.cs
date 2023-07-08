@@ -16,39 +16,48 @@ using DocumentWorker.DTO.Model.Interfaces;
 using DocumentWorker.Infrastructure.Validator.ModelValidator;
 using DocumentWorker.Infrastructure.Validator.ModelValidator.Interfaces;
 using DocumentWorker.DTO.Model;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using DocumentWorker.Infrastructure.AutofacModules;
 
 namespace DocumentWorker
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; private set; }
-
+        public static IConfigurationRoot Configuration { get; private set; }
+        public static IContainer ApplicationContainer { get; set; }
         public Startup()
         {
 
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             #region Настройка DI
-            services.AddTransient<ITxtFileReaderService, TxtFileReaderWithValidationService>();
-            services.AddTransient<ITxtFileValidator, TxtFileValidator>();
-            services.AddTransient(typeof(IStringParserService), typeof(WordInfoParserWithValidationService<WordInfo>));
-            services.AddTransient(typeof(IModelValidator<>), typeof(ModelValidator<>));
-            services.AddTransient<WordProcessingService>();
+            services = new ServiceCollection();
+            Configuration = CreateConfigurationBuilder();
+
+            services.AddSingleton(Configuration);
+
+            string nlogConfigName = Configuration.GetValue<string>("NLogerConfig:DefaultConfig");
+
             services.AddLogging(opt =>
             {
-                opt.AddNLog();
+                opt.AddNLog(nlogConfigName);
                 opt.AddConsole();
                 opt.AddDebug();
                 opt.SetMinimumLevel(LogLevel.Debug);
             });
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.RegisterModule<DocumentWorkerInfrastructurePerDependencyModule>();
+
+            ApplicationContainer = builder.Build();
+            IServiceProvider serviceProvider = new AutofacServiceProvider(ApplicationContainer);
+
+            return serviceProvider;
             #endregion
-
-            Configuration = CreateConfigurationBuilder();
-
-            services.AddSingleton(Configuration);
         }
         private IConfigurationRoot CreateConfigurationBuilder()
         {

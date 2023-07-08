@@ -39,16 +39,16 @@ namespace DocumentWorker.Infrastructure.Validator.ModelValidator
             if (!System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, context, results, true))
             {
                 string errorMessages = "";
-                errorMessages += $"Объекту {model.GetType().Name} не удалось пройти валидацию. ";
+                errorMessages += $"Объекту {model.GetType().Name} не удалось пройти валидацию.\n";
                 foreach (var error in results)
                 {
-                    errorMessages += $"{error.ErrorMessage} ";
+                    errorMessages += $"{error.ErrorMessage}\n";
                 }
                 _logger.LogError(errorMessages);
                 return false;
             }
             else
-                _logger.LogInformation($"Объект {model.GetType().Name} успешно прошел валидацию.");
+                _logger.LogInformation($"Объект {model.GetType().Name} успешно прошел валидацию.\n");
 
             return true;
         }

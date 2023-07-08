@@ -14,12 +14,19 @@ using System.Threading.Tasks;
 using DocumentWorker.Infrastructure.Validator.ModelValidator.Interfaces;
 using DocumentWorker.Infrastructure.Validator.ModelValidator;
 using DocumentWorker.DTO.Model;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Autofac.Extras.DynamicProxy;
+using DocumentWorker.Infrastructure;
+using DocumentWorker.Tests.AutofacModules;
 
 namespace DocumentWorker.Tests
 {
     [TestClass]
     public class Class1
     {
+        private IContainer ApplicationContainer { get; set; }
+
         private const string TestFolderPath = "TestFiles/";
         private readonly ITxtFileReaderService _fileReaderService;
         private readonly WordProcessingService _wordProcessingService;
@@ -30,22 +37,27 @@ namespace DocumentWorker.Tests
         {
             #region Настройка DI
             IServiceCollection services = new ServiceCollection();
-            services.AddTransient<ITxtFileReaderService, TxtFileReaderWithValidationService>();
-            services.AddTransient<ITxtFileValidator, TxtFileValidator>();
-            services.AddTransient(typeof(IStringParserService), typeof(WordInfoParserWithValidationService<WordInfo>));
-            services.AddTransient(typeof(IModelValidator<>), typeof(ModelValidator<>));
-            services.AddTransient<WordProcessingService>();
             services.AddLogging(opt =>
             {
-                opt.AddNLog();
+                opt.AddNLog("nlog.config");
                 opt.AddConsole();
                 opt.AddDebug();
                 opt.SetMinimumLevel(LogLevel.Debug);
             });
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            builder.RegisterModule<TestPerDependencyModule>();
+
+            this.ApplicationContainer = builder.Build();
+            IServiceProvider serviceProvider = new AutofacServiceProvider(ApplicationContainer);
+
             _fileReaderService = serviceProvider.GetService<ITxtFileReaderService>();
-            _wordProcessingService = serviceProvider.GetService<WordProcessingService>();
+            //_wordProcessingService = serviceProvider.GetService<WordProcessingService>();
+            _wordProcessingService = ApplicationContainer.Resolve<WordProcessingService>();
             _logger = serviceProvider.GetService<ILogger<Class1>>();
+
             #endregion
         }
 

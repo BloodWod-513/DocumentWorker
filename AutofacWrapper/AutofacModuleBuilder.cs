@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using Autofac;
 using Autofac.Core;
-
+using Autofac.Extras.DynamicProxy;
+using Castle.DynamicProxy;
 
 namespace AutofacWrapper
 {
@@ -39,6 +40,22 @@ namespace AutofacWrapper
         }
 
         /// <summary>
+        /// Простое сопоставление реализации интерфейсу с установкой интерцептора
+        /// </summary>
+        /// <typeparam name="TClass">Реализация</typeparam>
+        /// <typeparam name="TInterface">Интерфейс</typeparam>
+        /// <typeparam name="TInterceptor">Интерцептор</typeparam>
+        /// <param name="moduleType"></param>
+        protected void SimpleRegisterWithInterfaceInterceptor<TClass, TInterface, TInterceptor>(ModuleType moduleType) 
+            where TClass : TInterface 
+            where TInterceptor : class, IInterceptor
+        {
+            _builder.RegisterType<TClass>().As<TInterface>().SetLifeTime(moduleType)
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(TInterceptor));
+        }
+
+        /// <summary>
         /// Регистрация типа
         /// </summary>
         /// <typeparam name="TClass">Реализация</typeparam>
@@ -46,6 +63,21 @@ namespace AutofacWrapper
         protected void SimpleRegister<TClass>(ModuleType moduleType) where TClass : class
         {
             _builder.RegisterType<TClass>().SetLifeTime(moduleType);
+        }
+
+        /// <summary>
+        /// Регистрация типа с установкой интерцептора
+        /// </summary>
+        /// <typeparam name="TClass">Реализация</typeparam>
+        /// <typeparam name="TInterceptor">Интерцептор</typeparam>
+        /// <param name="moduleType"></param>
+        protected void SimpleRegisterWithClassInterceptor<TClass, TInterceptor>(ModuleType moduleType)
+            where TClass : class
+            where TInterceptor : class, IInterceptor
+        {
+            _builder.RegisterType<TClass>().SetLifeTime(moduleType)
+                .EnableClassInterceptors()
+                .InterceptedBy(typeof(TInterceptor));
         }
 
         /// <summary>
@@ -100,6 +132,20 @@ namespace AutofacWrapper
         protected void RegisterGeneric(Type classType, Type interfaceType, ModuleType moduleType)
         {
             _builder.RegisterGeneric(classType).As(interfaceType).SetLifeTime(moduleType);
+        }
+
+        /// <summary>
+        /// Регистрация generic c интерцептором
+        /// </summary>
+        /// <param name="classType"></param>
+        /// <param name="interfaceType"></param>
+        /// <param name="moduleType"></param>
+        /// <param name="interceptorType"></param>
+        protected void RegisterGenericWithInterfaceInterceptor(Type classType, Type interfaceType, ModuleType moduleType, Type interceptorType)
+        {
+            _builder.RegisterGeneric(classType).As(interfaceType).SetLifeTime(moduleType)
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(interceptorType);
         }
 
         /// <summary>

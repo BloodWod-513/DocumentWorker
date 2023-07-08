@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentWorker", "DocumentWorker\DocumentWorker.csproj", "{96384779-DC24-44AA-B9BA-033D16C9B651}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentWorker", "DocumentWorker\DocumentWorker.csproj", "{96384779-DC24-44AA-B9BA-033D16C9B651}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentWorker.DTO", "DocumentWorker.DTO\DocumentWorker.DTO.csproj", "{45B8E9A9-EB4C-43EC-9F31-4B6928EE2277}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentWorker.DTO", "DocumentWorker.DTO\DocumentWorker.DTO.csproj", "{45B8E9A9-EB4C-43EC-9F31-4B6928EE2277}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentWorker.Infrastructure", "DocumentWorker.Infrastructure\DocumentWorker.Infrastructure.csproj", "{5FA61DEA-44FF-44C1-919D-C3B7DD28EAA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentWorker.Infrastructure", "DocumentWorker.Infrastructure\DocumentWorker.Infrastructure.csproj", "{5FA61DEA-44FF-44C1-919D-C3B7DD28EAA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentWorker.Tests", "DocumentWorker.Tests\DocumentWorker.Tests.csproj", "{E9471186-810F-4FA4-AF30-CDF399377708}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocumentWorker.Tests", "DocumentWorker.Tests\DocumentWorker.Tests.csproj", "{E9471186-810F-4FA4-AF30-CDF399377708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutofacWrapper", "AutofacWrapper\AutofacWrapper.csproj", "{2C13C5A4-E232-40B3-BA0F-C960627EF88E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{E9471186-810F-4FA4-AF30-CDF399377708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9471186-810F-4FA4-AF30-CDF399377708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9471186-810F-4FA4-AF30-CDF399377708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C13C5A4-E232-40B3-BA0F-C960627EF88E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C13C5A4-E232-40B3-BA0F-C960627EF88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C13C5A4-E232-40B3-BA0F-C960627EF88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C13C5A4-E232-40B3-BA0F-C960627EF88E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

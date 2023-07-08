@@ -9,12 +9,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 using NLog.Extensions.Logging;
+using Autofac;
+using DocumentWorker.Infrastructure;
+using Autofac.Extensions.DependencyInjection;
+using Autofac.Extras.DynamicProxy;
+using Castle.DynamicProxy;
+using DocumentWorker.DTO.Model.Interfaces;
+using DocumentWorker.Tests.AutofacModules;
 
 namespace DocumentWorker.Tests
 {
     [TestClass]
     public class ValidatorsTest
     {
+        private IContainer ApplicationContainer { get; set; }
+
         private const string TestFolderPath = "TestFiles/";
         private readonly ITxtFileValidator _txtFileValidator;
         private readonly IModelValidator<WordInfo> _wordInfoModelValidator;
@@ -25,19 +34,24 @@ namespace DocumentWorker.Tests
         {
             #region Настройка DI
             IServiceCollection services = new ServiceCollection();
-            services.AddTransient<ITxtFileReaderService, TxtFileReaderWithValidationService>();
-            services.AddTransient<ITxtFileValidator, TxtFileValidator>();
-            services.AddTransient(typeof(IStringParserService), typeof(WordInfoParserWithValidationService<WordInfo>));
-            services.AddTransient(typeof(IModelValidator<>), typeof(ModelValidator<>));
-            services.AddTransient<WordProcessingService>();
             services.AddLogging(opt =>
             {
-                opt.AddNLog();
+                opt.AddNLog("nlog.config");
                 opt.AddConsole();
                 opt.AddDebug();
                 opt.SetMinimumLevel(LogLevel.Debug);
             });
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            builder.RegisterModule<TestPerDependencyModule>();
+          
+            this.ApplicationContainer = builder.Build();
+            IServiceProvider serviceProvider = new AutofacServiceProvider(ApplicationContainer);
+
+            _wordInfoModelValidator = serviceProvider.GetService<IModelValidator<WordInfo>>();
+            _txtFileValidator = serviceProvider.GetService<ITxtFileValidator>();
             _fileReaderService = serviceProvider.GetService<ITxtFileReaderService>();
             _logger = serviceProvider.GetService<ILogger<ValidatorsTest>>();
             #endregion
@@ -78,7 +92,6 @@ namespace DocumentWorker.Tests
             FileInfo txtFileInfo = new FileInfo(path);
 
             var isValid = _txtFileValidator.IsUTF8Encoding(txtFileInfo);
-            Console.WriteLine(isValid);
 
             Assert.IsFalse(isValid);
         }
