@@ -1,12 +1,15 @@
-﻿using DocumenWorker.DB.API.Models;
-using DocumenWorker.DB.API.Repository.Interfaces;
+﻿using DocumentWorker.APIDB.DTO.Models;
+using DocumenWorker.DB.API.Services;
 using DocumenWorker.DB.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumenWorker.DB.API.Controllers
 {
+    /// <summary>
+    /// Контроллер для работы с основной таблицой
+    /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WordInfoController : ControllerBase
     {
         private readonly IWordInfoService _wordInfoService;
@@ -16,11 +19,26 @@ namespace DocumenWorker.DB.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(WordInfo wordInfo)
+        public IActionResult Add(WordInfoDomain wordInfo)
         {
             try
             {
                 _wordInfoService.Add(wordInfo);
+                return Ok(true);
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+        [Route("AddRange")]
+        [HttpPost]
+        public IActionResult AddRange(List<WordInfoDomain> wordInfos)
+        {
+            try
+            {
+                _wordInfoService.AddRange(wordInfos);
                 return Ok(true);
 
             }
@@ -56,12 +74,27 @@ namespace DocumenWorker.DB.API.Controllers
             }
         }
         [HttpPut]
-        public IActionResult Update(WordInfo wordInfo)
+        public IActionResult Update(WordInfoDomain wordInfo)
         {
             try
             {
                 var result = _wordInfoService.Update(wordInfo);
                 return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+        [Route("UpdateRange")]
+        [HttpPut]
+        public IActionResult UpdateRange(List<WordInfoDomain> wordInfos)
+        {
+            try
+            {
+                _wordInfoService.UpdateRange(wordInfos);
+                return Ok(true);
+
             }
             catch (Exception)
             {

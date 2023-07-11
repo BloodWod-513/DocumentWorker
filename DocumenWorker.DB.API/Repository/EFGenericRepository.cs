@@ -35,6 +35,16 @@ namespace DocumenWorker.DB.API.Repository
             _dbSet.Add(item);
             return CheckSave();
         }
+        public bool AddRange(List<TEntity> items)
+        {
+            _dbSet.AddRange(items);
+            return CheckSave();
+        }
+        public bool UpdateRange(List<TEntity> items)
+        {
+            _dbSet.UpdateRange(items);
+            return CheckSave();
+        }
         public bool Update(TEntity item)
         {
             _context.Entry(item).State = EntityState.Modified;

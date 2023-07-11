@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DocumentWorker.DB.Client\DocumentWorker.APIDB.Client.csproj" />
     <ProjectReference Include="..\DocumentWorker.DTO\DocumentWorker.DTO.csproj" />
     <ProjectReference Include="..\DocumentWorker.Infrastructure\DocumentWorker.Infrastructure.csproj" />
   </ItemGroup>

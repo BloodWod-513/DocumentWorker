@@ -1,4 +1,4 @@
-﻿namespace DocumenWorker.DB.API.Domains.Interfaces
+﻿namespace DocumentWorker.APIDB.DTO.Models.Interfaces
 {
     public interface IBaseEntity
     {

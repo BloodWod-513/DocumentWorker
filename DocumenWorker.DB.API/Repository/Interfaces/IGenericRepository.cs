@@ -4,6 +4,8 @@
         where TEntity : class
     {
         bool Add(TEntity item);
+        bool AddRange(List<TEntity> entities);
+        bool UpdateRange(List<TEntity> entities);
         bool Update(TEntity item);
         bool Remove(TEntity item);
         bool Remove(int id);

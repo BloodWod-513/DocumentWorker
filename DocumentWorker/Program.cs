@@ -1,4 +1,7 @@
 ﻿using Autofac;
+using Castle.Core.Configuration;
+using DocumentWorker.APIDB.Client.Services;
+using DocumentWorker.APIDB.DTO.Models;
 using DocumentWorker.DTO.Model;
 using DocumentWorker.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
@@ -25,10 +28,23 @@ namespace DocumentWorker
 
         public static void Run()
         {
-            string path = TxtFilesFolderPath + "ForRead.txt";
-            FileInfo txtFileInfo = new FileInfo(path);
-            var wordProcessingService = Startup.ApplicationContainer.Resolve<WordProcessingService>();
-            var result = wordProcessingService.GetWords(txtFileInfo);
+            string apiDBUrl = Startup.Configuration.GetValue<string>("APIDB:Url");
+            WordInfoTempRequestService<WordInfoTempDomain> wordInfoTempRequestService = new WordInfoTempRequestService<WordInfoTempDomain>(apiDBUrl);
+            var zxc = new List<WordInfoTempDomain>()
+            {
+                new WordInfoTempDomain()
+                {
+                    Name = "testim2",
+                    Count = 1,
+                },
+                new WordInfoTempDomain()
+                {
+                    Name = "testim3",
+                    Count = 1,
+                },
+            };
+            var sss = wordInfoTempRequestService.AddRangeRequest(zxc);
+            var ssget = wordInfoTempRequestService.GetRequest(1);
         }
     }
 }

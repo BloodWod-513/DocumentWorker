@@ -17,4 +17,8 @@
     <Folder Include="Configure\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DocumentWorker.APIDB.DTO\DocumentWorker.APIDB.DTO.csproj" />
+  </ItemGroup>
+
 </Project>

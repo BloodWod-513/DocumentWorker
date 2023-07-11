@@ -1,6 +1,3 @@
-using Autofac.Extensions.DependencyInjection;
-using DocumenWorker.DB.API.Models;
-
 namespace DocumenWorker.DB.API
 {
     public class Program

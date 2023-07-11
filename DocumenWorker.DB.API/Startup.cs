@@ -6,8 +6,6 @@ using DocumenWorker.DB.API.Services;
 using Microsoft.EntityFrameworkCore;
 using DocumenWorker.DB.API.Context;
 using DocumenWorker.DB.API.Context.Interfaces;
-using DocumenWorker.DB.API.Middleware;
-using DocumenWorker.DB.API.Filters;
 
 namespace DocumenWorker.DB.API
 {
@@ -26,7 +24,6 @@ namespace DocumenWorker.DB.API
 
             RegisterDepencidies(builder);
 
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -39,8 +36,6 @@ namespace DocumenWorker.DB.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
-            app.UseRequestCorrelationId();
 
             app.MapControllers();
 
@@ -78,7 +73,7 @@ namespace DocumenWorker.DB.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
-            builder.Services.AddSwaggerGen(c => c.OperationFilter<AddRequiredHeaderParameter>());
+            builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton(ConfigurationRoot);
 
             builder.Services.AddDbContext<ApplicationContext>(options =>

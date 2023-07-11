@@ -1,10 +1,12 @@
-﻿using DocumenWorker.DB.API.Domains;
-using DocumenWorker.DB.API.Models;
+﻿using DocumentWorker.APIDB.DTO.Models;
 using DocumenWorker.DB.API.Repository.Interfaces;
 using DocumenWorker.DB.API.Services.Interfaces;
 
 namespace DocumenWorker.DB.API.Services
 {
+    /// <summary>
+    /// Сервис для работы с второстепенной таблицей
+    /// </summary>
     public class WordInfoTempService : IWordInfoTempService
     {
         private readonly IGenericRepository<WordInfoTempDomain> _wordInfoTempRepo;
@@ -23,5 +25,8 @@ namespace DocumenWorker.DB.API.Services
         public bool Remove(int id) => _wordInfoTempRepo.Remove(id);
 
         public bool Update(WordInfoTempDomain wordInfo) => _wordInfoTempRepo.Update(wordInfo);
+
+        public bool UpdateRange(List<WordInfoTempDomain> wordInfoTemps) => _wordInfoTempRepo.UpdateRange(wordInfoTemps);
+        public bool AddRange(List<WordInfoTempDomain> wordInfoTemps) => _wordInfoTempRepo.AddRange(wordInfoTemps);
     }
 }

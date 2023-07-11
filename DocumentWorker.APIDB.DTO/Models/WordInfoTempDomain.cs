@@ -1,7 +1,10 @@
-﻿using DocumenWorker.DB.API.Domains.Interfaces;
+﻿using DocumentWorker.APIDB.DTO.Models.Interfaces;
 
-namespace DocumenWorker.DB.API.Domains
+namespace DocumentWorker.APIDB.DTO.Models
 {
+    /// <summary>
+    /// Модель второстепенной таблицы
+    /// </summary>
     public class WordInfoTempDomain : IBaseEntity
     {
         public int Id { get; set; }
