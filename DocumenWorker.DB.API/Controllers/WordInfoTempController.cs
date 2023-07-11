@@ -17,12 +17,13 @@ namespace DocumenWorker.DB.API.Controllers
             _wordInfoTempService = wordInfoTempService;
         }
 
+        [Route("AddRange")]
         [HttpPost]
-        public IActionResult Add(WordInfoTempDomain wordInfo)
+        public IActionResult AddRange(List<WordInfoTempDomain> wordInfos)
         {
             try
             {
-                _wordInfoTempService.Add(wordInfo);
+                _wordInfoTempService.AddRange(wordInfos);
                 return Ok(true);
 
             }
@@ -31,13 +32,12 @@ namespace DocumenWorker.DB.API.Controllers
                 return StatusCode(500);
             }
         }
-        [Route("AddRange")]
         [HttpPost]
-        public IActionResult AddRange(List<WordInfoTempDomain> wordInfos)
+        public IActionResult Add(WordInfoTempDomain wordInfo)
         {
             try
             {
-                _wordInfoTempService.AddRange(wordInfos);
+                _wordInfoTempService.Add(wordInfo);
                 return Ok(true);
 
             }

@@ -6,6 +6,11 @@ using DocumenWorker.DB.API.Services;
 using Microsoft.EntityFrameworkCore;
 using DocumenWorker.DB.API.Context;
 using DocumenWorker.DB.API.Context.Interfaces;
+using Autofac.Core;
+using Hangfire;
+using DocumenWorker.DB.API.Jobs;
+using DocumenWorker.DB.API.Jobs.DomainJobs;
+using DocumenWorker.DB.API.Jobs.RecuringJobs;
 
 namespace DocumenWorker.DB.API
 {
@@ -13,6 +18,7 @@ namespace DocumenWorker.DB.API
     {
         public IConfiguration Configuration { get; }
         public static IConfigurationRoot ConfigurationRoot { get; private set; }
+        public static IServiceCollection ServiceCollection { get; private set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -22,7 +28,10 @@ namespace DocumenWorker.DB.API
         {
             var builder = WebApplication.CreateBuilder();
 
+            ServiceSettings(builder);
             RegisterDepencidies(builder);
+
+            ServiceCollection = builder.Services;
 
             var app = builder.Build();
 
@@ -32,6 +41,10 @@ namespace DocumenWorker.DB.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+
+            app.UseHangfireDashboard("/dashboard");
+            RecuringJobScheduler.Start();
 
             app.UseHttpsRedirection();
 
@@ -65,15 +78,20 @@ namespace DocumenWorker.DB.API
                 Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
                 .AddJsonFile("appsettings.json", false, false).Build();
         }
-
-        private void RegisterDepencidies(WebApplicationBuilder builder)
+        private void ServiceSettings(WebApplicationBuilder builder)
         {
-            // Add services to the container.
+            builder.Services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddHangfireServer();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
             builder.Services.AddSwaggerGen();
+        }
+
+        private void RegisterDepencidies(WebApplicationBuilder builder)
+        {
+            //Add services to the container.
             builder.Services.AddSingleton(ConfigurationRoot);
 
             builder.Services.AddDbContext<ApplicationContext>(options =>

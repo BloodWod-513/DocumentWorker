@@ -9,8 +9,9 @@
         bool Update(TEntity item);
         bool Remove(TEntity item);
         bool Remove(int id);
+        bool RemoveRange(List<TEntity> item);
         TEntity FindById(int id);
-        IEnumerable<TEntity> Get();
-        IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
+        List<TEntity> Get();
+        List<TEntity> Get(Func<TEntity, bool> predicate);
     }
 }

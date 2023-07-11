@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DocumenWorker.DB.API.Repository
 {
-    public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> 
+    public class EFGenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : class
     {
         IDBContext _context;
@@ -16,12 +16,12 @@ namespace DocumenWorker.DB.API.Repository
             _dbSet = context.Set<TEntity>();
         }
 
-        public IEnumerable<TEntity> Get()
+        public List<TEntity> Get()
         {
             return _dbSet.AsNoTracking().ToList();
         }
 
-        public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
+        public List<TEntity> Get(Func<TEntity, bool> predicate)
         {
             return _dbSet.AsNoTracking().Where(predicate).ToList();
         }
@@ -63,5 +63,11 @@ namespace DocumenWorker.DB.API.Repository
         }
 
         private bool CheckSave() => _context.SaveChanges() > 0;
+
+        public bool RemoveRange(List<TEntity> items)
+        {
+            _dbSet.RemoveRange(items);
+            return CheckSave();
+        }
     }
 }
