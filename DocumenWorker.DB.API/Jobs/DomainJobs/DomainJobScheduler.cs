@@ -7,6 +7,9 @@ using System;
 
 namespace DocumenWorker.DB.API.Jobs.DomainJobs
 {
+    /// <summary>
+    /// Планироващик для Background джоб
+    /// </summary>
     public class DomainJobScheduler
     {       
         public static void InsertIntoWordInfoTempTableJob(PerformContext performContext, List<WordInfoTempDomain> baseEntity)

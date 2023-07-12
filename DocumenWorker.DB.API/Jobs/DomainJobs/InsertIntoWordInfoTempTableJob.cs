@@ -5,6 +5,10 @@ using DocumenWorker.DB.API.Repository.Interfaces;
 
 namespace DocumenWorker.DB.API.Jobs.DomainJobs
 {
+    /// <summary>
+    /// Джоба, которая должна инсертить данные в таблицу WordInfoTemp
+    /// </summary>
+    /// <typeparam name="T">Тип модели</typeparam>
     public class InsertIntoWordInfoTempTableJob<T> : HangfireDomainBaseJob<T>
         where T : class, IBaseEntity
     {

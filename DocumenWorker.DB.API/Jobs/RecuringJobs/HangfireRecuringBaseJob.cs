@@ -7,6 +7,9 @@ using Hangfire.Server;
 
 namespace DocumenWorker.DB.API.Jobs.RecuringJobs
 {
+    /// <summary>
+    /// Базовый класс для повторяющихся джоб
+    /// </summary>
     public abstract class HangfireRecuringBaseJob : IHangfireRecuringJob
     {
         protected ILogger<HangfireRecuringBaseJob> _logger;

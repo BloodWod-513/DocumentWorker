@@ -5,6 +5,10 @@ using DocumenWorker.DB.API.Jobs.DomainJobs;
 
 namespace DocumenWorker.DB.API.Jobs.RecuringJobs
 {
+    /// <summary>
+    /// Повторяющая джоба, задача которой проверять темп таблицу WordInfoTemps
+    /// и если в ней лежат значения, то подтягивать их, обрабатывать, очищать темп и обновлять новую таблицу.
+    /// </summary>
     public class UpdateWordInfoTableJob : HangfireRecuringBaseJob
     {
         private IGenericRepository<WordInfoDomain> _wordInfoRepo;

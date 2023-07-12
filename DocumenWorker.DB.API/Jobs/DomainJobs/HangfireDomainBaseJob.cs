@@ -6,6 +6,11 @@ using DocumenWorker.DB.API.Jobs.DomainJobs.Interfaces;
 
 namespace DocumenWorker.DB.API.Jobs.DomainJobs
 {
+    /// <summary>
+    /// Базовый класс для background джоб, который работает с моделями от интерфейса IBaseEntity.
+    /// То есть, эти джобы можно использовать для CRUD операций
+    /// </summary>
+    /// <typeparam name="T">Тип модели</typeparam>
     public abstract class HangfireDomainBaseJob<T> : IHangfireDomainJob<T>
         where T : class, IBaseEntity
     {

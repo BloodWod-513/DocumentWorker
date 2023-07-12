@@ -20,6 +20,11 @@ namespace DocumenWorker.DB.API.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Метод контроллера, который должен передать полученный список в сервис
+        /// </summary>
+        /// <param name="wordInfos"></param>
+        /// <returns></returns>
         [Route("AddRange")]
         [HttpPost]
         public IActionResult AddRange(List<WordInfoTempDomain> wordInfos)

@@ -38,6 +38,11 @@ namespace DocumenWorker.DB.API.Services
             return _wordInfoTempRepo.RemoveRange(items);
         }
         #endregion
+        /// <summary>
+        /// Создает джобу и передает в список.
+        /// </summary>
+        /// <param name="wordInfoTemps">Список слов</param>
+        /// <returns></returns>
         public bool AddRange(List<WordInfoTempDomain> wordInfoTemps)
         {
             _logger.LogDebug("Пробуем создать BackgroundJob InsertIntoWordInfoTempTableJob..");

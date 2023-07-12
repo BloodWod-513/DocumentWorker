@@ -5,13 +5,32 @@ using DocumenWorker.DB.API.Hangfire.Filters;
 
 namespace DocumenWorker.DB.API.Jobs.RecuringJobs
 {
+    /// <summary>
+    /// Класс планировщик повторяющихся джоб
+    /// </summary>
     public class RecuringJobScheduler
     {
+        /// <summary>
+        /// Тут лежат джобы
+        /// </summary>
         private static List<Type> _types = new List<Type>();
+
+        /// <summary>
+        /// Метод, который должен вызываться при запуске программы для запуска всех повторяющихся джоб
+        /// </summary>
         public static void Start()
         {
             RecurringJob.AddOrUpdate(() => UpdateWordInfoTableJob(null), "*/10 * * * * *", TimeZoneInfo.Local);
         }
+
+        /// <summary>
+        /// Метод, который проверяет наличие джоб в списке _types, нужен для того,
+        /// чтобы одна и таже джоба не задвоилась, затроилась и так далее...
+        /// То есть, если в списке есть еще джоба и она еще не запущена, то лишние убираются
+        /// </summary>
+        /// <typeparam name="TJob">Тип джобы</typeparam>
+        /// <param name="pContext"></param>
+        /// <exception cref="Exception"></exception>
         public static void Job<TJob>(PerformContext pContext) where TJob : IHangfireRecuringJob, new()
         {
             var job = new TJob();
