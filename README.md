@@ -37,10 +37,11 @@ DocumentWorker - это проект, который содержит в себ�
 
 Также у WEB API DB есть две технологии для которых предусмотрен интерфейс:
 1. Swagger - является стартовой страницей, можно перейти по URL: host/swagger;
-![image](https://github.com/BloodWod-513/DocumentWorker/assets/33897884/5e66dcb2-c044-430f-aa30-417dc4003e5f)
+![image](https://github.com/BloodWod-513/DocumentWorker/assets/33897884/33eb5b1c-ba3f-4d73-a66e-bdbed215035c)
 2. Hangfire - информационная панель планировщика задач, можно перейти по URL: host/dashboard;
-![image](https://github.com/BloodWod-513/DocumentWorker/assets/33897884/17b44723-04fe-4381-b351-360b0a197559)
-![image](https://github.com/BloodWod-513/DocumentWorker/assets/33897884/bfaf3476-c86f-4c2d-b0ab-4ad51eaf39f1)
+![image](https://github.com/BloodWod-513/DocumentWorker/assets/33897884/ec8a3d29-8fbd-4099-ad01-e4db5d75b5da)
+![image](https://github.com/BloodWod-513/DocumentWorker/assets/33897884/367e31c6-a561-4bf6-acc4-b905ffd139c7)
+
 
 ## Структура проекта
 Проект DocumentWorker содержит в себе несколько проектов:
