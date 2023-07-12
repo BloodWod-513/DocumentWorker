@@ -11,5 +11,6 @@ namespace DocumentWorker.DTO.Model.Interfaces
     /// </summary>
     public interface IModelValidation
     {
+        public enum ModelValidatorsType { Default, WordInfo }
     }
 }

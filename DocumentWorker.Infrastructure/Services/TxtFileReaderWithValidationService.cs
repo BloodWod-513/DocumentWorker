@@ -22,7 +22,6 @@ namespace DocumentWorker.Infrastructure.Services
             ITxtFileValidator txtFileValidator)
         {
             _logger = logger;
-            //_txtFileValidator = new TxtFileValidator();
             _txtFileValidator = txtFileValidator;
         }
 
@@ -36,7 +35,6 @@ namespace DocumentWorker.Infrastructure.Services
             }
             else
             {
-                _logger.LogError("Ошибка при открытии файла");
                 throw new Exception("Ошибка при открытии файла");
             }
         }

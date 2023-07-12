@@ -12,9 +12,12 @@ namespace DocumenWorker.DB.API.Controllers
     public class WordInfoTempController : ControllerBase
     {
         private readonly IWordInfoTempService _wordInfoTempService;
-        public WordInfoTempController(IWordInfoTempService wordInfoTempService)
+        private readonly ILogger<WordInfoTempController> _logger;
+        public WordInfoTempController(IWordInfoTempService wordInfoTempService,
+            ILogger<WordInfoTempController> logger)
         {
             _wordInfoTempService = wordInfoTempService;
+            _logger = logger;
         }
 
         [Route("AddRange")]
@@ -23,15 +26,16 @@ namespace DocumenWorker.DB.API.Controllers
         {
             try
             {
+                _logger.LogInformation("Пришел запрос в метод AddRange..");
                 _wordInfoTempService.AddRange(wordInfos);
                 return Ok(true);
-
             }
             catch (Exception)
             {
                 return StatusCode(500);
             }
         }
+        #region Для будущих целей, сейчас это использовать не надо
         [HttpPost]
         public IActionResult Add(WordInfoTempDomain wordInfo)
         {
@@ -100,5 +104,6 @@ namespace DocumenWorker.DB.API.Controllers
                 return StatusCode(500);
             }
         }
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ namespace DocumenWorker.DB.API.Jobs.DomainJobs
     public abstract class HangfireDomainBaseJob<T> : IHangfireDomainJob<T>
         where T : class, IBaseEntity
     {
-        protected ILogger _logger;
+        protected ILogger<HangfireDomainBaseJob<T>> _logger;
         public PerformContext Context { get; private set; }
 
         public void WriteLine(string msg)
@@ -20,20 +20,23 @@ namespace DocumenWorker.DB.API.Jobs.DomainJobs
         public virtual void ExecuteHangfire(PerformContext context, List<T> baseEntity)
         {
             Context = context;
-
-            try
+            var type = GetType();
+            using (var serviceProvider = Startup.ServiceCollection.BuildServiceProvider())
             {
-                WriteLine("Запуск Job");
+                _logger = serviceProvider.GetService<ILogger<HangfireDomainBaseJob<T>>>();
+                _logger.LogInformation($"Запуск работы {type}");
+                try
+                {
+                    DoJob(baseEntity);
 
-                DoJob(baseEntity);
-
-                //_logger.Info($"Stop {GetType()}");
-            }
-            catch (Exception exception)
-            {
-                WriteLine(exception.ToString());
-                //_logger.Error($"Error {GetType()}", exception);
-                throw new Exception(exception.Message, exception);
+                    _logger.LogInformation($"Конец рабты {type}");
+                }
+                catch (Exception exception)
+                {
+                    WriteLine(exception.ToString());
+                    _logger.LogError($"Ошибка при работе {type}", exception);
+                    throw new Exception(exception.Message, exception);
+                }
             }
         }
 

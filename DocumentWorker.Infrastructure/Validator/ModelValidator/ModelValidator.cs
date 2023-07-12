@@ -20,8 +20,8 @@ namespace DocumentWorker.Infrastructure.Validator.ModelValidator
     public class ModelValidator<T> : IModelValidator<T>
         where T : IModelValidation
     {
-        private readonly ILogger<WordProcessingService> _logger;
-        public ModelValidator(ILogger<WordProcessingService> logger) 
+        protected readonly ILogger<T> _logger;
+        public ModelValidator(ILogger<T> logger) 
         {
             _logger = logger;
         }
@@ -29,28 +29,35 @@ namespace DocumentWorker.Infrastructure.Validator.ModelValidator
         {
             if (model == null)
             {
-                Console.WriteLine("Объект не должен быть равен null");
+                _logger.LogError("Объект не должен быть равен null");
                 return false;
             }
 
             var context = new ValidationContext(model);
             var results = new List<ValidationResult>();
 
-            if (!System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, context, results, true))
+            bool isValid = System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, context, results, true);
+
+            PrintErrors(model, results, isValid);
+
+            return isValid;
+        }
+        protected virtual void PrintErrors(T model, List<ValidationResult> validationResults, bool isValid)
+        {
+            if (isValid)
+            {
+                _logger.LogDebug($"Объект {model.GetType().Name} успешно прошел валидацию.\n");
+            }
+            else
             {
                 string errorMessages = "";
                 errorMessages += $"Объекту {model.GetType().Name} не удалось пройти валидацию.\n";
-                foreach (var error in results)
+                foreach (var error in validationResults)
                 {
                     errorMessages += $"{error.ErrorMessage}\n";
                 }
-                _logger.LogError(errorMessages);
-                return false;
+                _logger.LogDebug(errorMessages);
             }
-            else
-                _logger.LogInformation($"Объект {model.GetType().Name} успешно прошел валидацию.\n");
-
-            return true;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace DocumenWorker.DB.API.Controllers
             _wordInfoService = wordInfoService;
         }
 
+        #region Для будущих целей, сейчас это использовать не надо
         [HttpPost]
         public IActionResult Add(WordInfoDomain wordInfo)
         {
@@ -101,5 +102,6 @@ namespace DocumenWorker.DB.API.Controllers
                 return StatusCode(500);
             }
         }
+        #endregion
     }
 }

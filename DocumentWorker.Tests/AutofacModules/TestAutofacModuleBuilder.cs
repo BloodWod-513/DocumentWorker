@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static DocumentWorker.DTO.Model.Interfaces.IModelValidation;
 
 namespace DocumentWorker.Tests.AutofacModules
 {
@@ -36,7 +37,8 @@ namespace DocumentWorker.Tests.AutofacModules
         private void RegisterValidatorDependencies(ModuleType moduleType)
         {
             SimpleRegisterWithInterfaceInterceptor<TxtFileValidator, ITxtFileValidator, LoggerInterceptor>(moduleType);
-            RegisterGenericWithInterfaceInterceptor(typeof(ModelValidator<>), typeof(IModelValidator<>), moduleType, typeof(LoggerInterceptor));
+            RegisterGenericWithInterfaceInterceptor(typeof(ModelValidator<>), typeof(IModelValidator<>), moduleType, typeof(LoggerInterceptor), ModelValidatorsType.Default);
+            RegisterGenericWithInterfaceInterceptor(typeof(WordInfoModelValidator<>), typeof(IModelValidator<>), moduleType, typeof(LoggerInterceptor), ModelValidatorsType.WordInfo);
         }
         private void RegisterServiceDependencies(ModuleType moduleType)
         {

@@ -149,6 +149,20 @@ namespace AutofacWrapper
         }
 
         /// <summary>
+        /// Регистрация generic c интерцептором и ключем
+        /// </summary>
+        /// <param name="classType"></param>
+        /// <param name="interfaceType"></param>
+        /// <param name="moduleType"></param>
+        /// <param name="interceptorType"></param>
+        protected void RegisterGenericWithInterfaceInterceptor(Type classType, Type interfaceType, ModuleType moduleType, Type interceptorType, object serviceKey)
+        {
+            _builder.RegisterGeneric(classType).Keyed(serviceKey, interfaceType).SetLifeTime(moduleType)
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(interceptorType);
+        }
+
+        /// <summary>
         /// Регистрация generic с параметром
         /// </summary>
         /// <param name="classType"></param>

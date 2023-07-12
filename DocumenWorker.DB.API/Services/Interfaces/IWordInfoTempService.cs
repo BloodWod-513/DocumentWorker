@@ -11,6 +11,6 @@ namespace DocumenWorker.DB.API.Services.Interfaces
         public WordInfoTempDomain GetById(int id);
         public bool Update(WordInfoTempDomain wordInfoTemp);
         public bool Remove(int id);
-        public bool RemoveRange(List<int> ids);
+        public bool RemoveRange(List<WordInfoTempDomain> items);
     }
 }

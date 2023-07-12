@@ -15,7 +15,7 @@ namespace DocumenWorker.DB.API.Services
         {
             _wordInfoServiceRepository = wordInfoServiceRepository;
         }
-
+        #region Не используются, для будущих целей
         public bool Add(WordInfoDomain wordInfo) => _wordInfoServiceRepository.Add(wordInfo);
 
         public bool AddRange(List<WordInfoDomain> wordInfos) => _wordInfoServiceRepository.AddRange(wordInfos);
@@ -26,5 +26,6 @@ namespace DocumenWorker.DB.API.Services
         public bool Update(WordInfoDomain wordInfo) => _wordInfoServiceRepository.Update(wordInfo);
 
         public bool UpdateRange(List<WordInfoDomain> wordInfos) => _wordInfoServiceRepository.UpdateRange(wordInfos);
+        #endregion
     }
 }

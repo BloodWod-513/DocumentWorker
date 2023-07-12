@@ -11,6 +11,8 @@ using Hangfire;
 using DocumenWorker.DB.API.Jobs;
 using DocumenWorker.DB.API.Jobs.DomainJobs;
 using DocumenWorker.DB.API.Jobs.RecuringJobs;
+using NLog.Extensions.Logging;
+using Hangfire.Console;
 
 namespace DocumenWorker.DB.API
 {
@@ -80,7 +82,19 @@ namespace DocumenWorker.DB.API
         }
         private void ServiceSettings(WebApplicationBuilder builder)
         {
-            builder.Services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+            string nlogConfigName = Configuration.GetValue<string>("NLogerConfig:DefaultConfig");
+            builder.Services.AddLogging(opt =>
+            {
+                opt.AddNLog(nlogConfigName);
+                opt.AddConsole();
+                opt.AddDebug();
+                opt.SetMinimumLevel(LogLevel.Debug);
+            });
+            builder.Services.AddHangfire(x =>
+            {
+                x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"));
+                x.UseConsole();
+            });
             builder.Services.AddHangfireServer();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

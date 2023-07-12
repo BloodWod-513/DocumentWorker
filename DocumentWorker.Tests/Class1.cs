@@ -60,13 +60,11 @@ namespace DocumentWorker.Tests
 
             #endregion
         }
-
         [TestMethod]
         public void Testik()
         {
             string path = TestFolderPath + "ForBadRead.txt";
             FileInfo txtFileInfo = new FileInfo(path);
-            //var x = _fileReaderService.ReadLine(txtFileInfo).ToList();
             var zxc = _wordProcessingService;
             var result = zxc.GetWords(txtFileInfo);
         }

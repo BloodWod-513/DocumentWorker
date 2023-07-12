@@ -22,7 +22,6 @@ namespace DocumentWorker
             IServiceCollection services = new ServiceCollection();
             Startup startup = new Startup();
             startup.ConfigureServices(services);
-            IServiceProvider serviceProvider = startup.ConfigureServices(services);
 
             Run();
         }
@@ -36,26 +35,8 @@ namespace DocumentWorker
             List<WordInfoTempDomain> wordInfoTemps = dict.Select(x => new WordInfoTempDomain { Name = x.Key, Count = x.Value.CountWordInText }).ToList();
 
             WordInfoTempRequestService<WordInfoTempDomain> wordInfoTempRequestService = new WordInfoTempRequestService<WordInfoTempDomain>(apiDBUrl);
-            //var zxc = new List<WordInfoTempDomain>()
-            //{
-            //    new WordInfoTempDomain()
-            //    {
-            //        Name = "testim2",
-            //        Count = 1,
-            //    },
-            //     new WordInfoTempDomain()
-            //    {
-            //        Name = "testim2",
-            //        Count = 3,
-            //    },
-            //    new WordInfoTempDomain()
-            //    {
-            //        Name = "testim3",
-            //        Count = 1,
-            //    },
-            //};
-            var sss = wordInfoTempRequestService.AddRangeRequest(wordInfoTemps);
-            //var ssget = wordInfoTempRequestService.GetRequest(1);
+
+            var request = wordInfoTempRequestService.AddRangeRequest(wordInfoTemps);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using DocumentWorker.APIDB.DTO.Models.Interfaces;
+using DocumenWorker.DB.API.Jobs.DomainJobs;
 using DocumenWorker.DB.API.Jobs.RecuringJobs.Interfaces;
 using Hangfire.Console;
 using Hangfire.Server;
@@ -7,7 +9,7 @@ namespace DocumenWorker.DB.API.Jobs.RecuringJobs
 {
     public abstract class HangfireRecuringBaseJob : IHangfireRecuringJob
     {
-        protected ILogger _logger;
+        protected ILogger<HangfireRecuringBaseJob> _logger;
         public PerformContext Context { get; private set; }
 
         public void WriteLine(string msg)
@@ -19,28 +21,24 @@ namespace DocumenWorker.DB.API.Jobs.RecuringJobs
         {
             Context = context;
 
-            try
+            var type = GetType();
+            using (var serviceProvider = Startup.ServiceCollection.BuildServiceProvider())
             {
-                WriteLine("Запуск Job");
+                _logger = serviceProvider.GetService<ILogger<HangfireRecuringBaseJob>>();
+                _logger.LogInformation($"Запуск работы {type}");
+                try
+                {
+                    DoJob();
 
-                DoJob();
-
-                //_logger.Info($"Stop {GetType()}");
-            }
-            catch (Exception exception)
-            {
-                WriteLine(exception.ToString());
-                //_logger.Error($"Error {GetType()}", exception);
-                throw new Exception(exception.Message, exception);
-            }
-
-            //using (var scope = Singleton<SiteDependencyResolver>.Instance.Container.BeginLifetimeScope())
-            //{
-            //    //_logger = scope.Resolve<ILogger>();
-            //    //_logger.Info($"Start {GetType()}");
-
-               
-            //}
+                    _logger.LogInformation($"Конец рабты {type}");
+                }
+                catch (Exception exception)
+                {
+                    WriteLine(exception.ToString());
+                    _logger.LogError($"Ошибка при работе {type}", exception);
+                    throw new Exception(exception.Message, exception);
+                }
+            }          
         }
 
         public abstract void DoJob();

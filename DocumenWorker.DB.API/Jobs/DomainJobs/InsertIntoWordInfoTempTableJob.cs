@@ -19,6 +19,7 @@ namespace DocumenWorker.DB.API.Jobs.DomainJobs
                 _wordInfoTempRepo = serviceProvider.GetService<IGenericRepository<WordInfoTempDomain>>();
                 try
                 {
+                    WriteLine("Добавление массива данных в БД..");
                     List<WordInfoTempDomain> wordInfos = baseEntity as List<WordInfoTempDomain>;
                     _wordInfoTempRepo.AddRange(wordInfos);
                 }

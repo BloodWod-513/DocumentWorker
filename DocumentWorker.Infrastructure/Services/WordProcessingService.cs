@@ -39,10 +39,9 @@ namespace DocumentWorker.Infrastructure.Services
                 }
                 DeleteNotCommonWords(dict);
             }
-            //TODO: кастомные екзепшены для валейдаторов
             catch (Exception ex)
             {
-                _logger.LogError($"Возникла ошибка: {ex.Message}");
+                _logger.LogCritical($"Возникла ошибка: {ex.Message}");
             }
             return dict;
         }
