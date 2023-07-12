@@ -1,6 +1,7 @@
 ﻿using Hangfire.Server;
 using Hangfire;
 using DocumenWorker.DB.API.Jobs.RecuringJobs.Interfaces;
+using DocumenWorker.DB.API.Hangfire.Filters;
 
 namespace DocumenWorker.DB.API.Jobs.RecuringJobs
 {
@@ -33,6 +34,12 @@ namespace DocumenWorker.DB.API.Jobs.RecuringJobs
                 throw new Exception(e.Message, e);
             }
         }
+        /// <summary>
+        /// Атрибут SkipWhenPreviousJobIsRunning отвечает за то, чтобы выполнялась только одна джоба,
+        /// которая будет апдейтить таблицу, то есть, если джоба в процессе, то новая даже не создатся
+        /// </summary>
+        /// <param name="performContext"></param>
+        [SkipWhenPreviousJobIsRunning]
         public static void UpdateWordInfoTableJob(PerformContext performContext)
         {
             Job<UpdateWordInfoTableJob>(performContext);
