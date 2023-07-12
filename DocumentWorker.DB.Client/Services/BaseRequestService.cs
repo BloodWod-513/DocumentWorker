@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace DocumentWorker.APIDB.Client.Services
 {
     /// <summary>
-    /// Класс в котором описано, как общаться с API BD
+    /// Класс в котором описано, как общаться с API BD.
+    /// Тут должна быть запросы связанные с моделями унаследованные от IBaseEntity
     /// </summary>
     /// <typeparam name="T">Объект, с которым необходимо работать</typeparam>
     public abstract class BaseRequestService<T> : IRequestService<T> where T : class, IBaseEntity
@@ -22,12 +23,12 @@ namespace DocumentWorker.APIDB.Client.Services
         {
             Url = url;
         }
-        public bool AddRangeRequest(List<T> wordInfoDomain)
+        public bool AddRangeRequest(List<T> model)
         {
             using (var httpClient = new HttpClient())
             {
-                var zxc = JsonConvert.SerializeObject(wordInfoDomain);
-                HttpContent content = new StringContent(JsonConvert.SerializeObject(wordInfoDomain), Encoding.UTF8, "application/json");
+                var zxc = JsonConvert.SerializeObject(model);
+                HttpContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
                 var request = new HttpRequestMessage()
                 {
                     RequestUri = new Uri($"{Url + ControllerName}/AddRange"),
@@ -39,11 +40,11 @@ namespace DocumentWorker.APIDB.Client.Services
                 return bool.Parse(resultString);
             }
         }
-        public bool AddRequest(T wordInfoDomain)
+        public bool AddRequest(T model)
         {
             using (var httpClient = new HttpClient())
             {
-                HttpContent content = new StringContent(JsonConvert.SerializeObject(wordInfoDomain), Encoding.UTF8, "application/json");
+                HttpContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
                 var request = new HttpRequestMessage()
                 {
                     RequestUri = new Uri($"{Url + ControllerName}"),
@@ -67,7 +68,7 @@ namespace DocumentWorker.APIDB.Client.Services
                 };
                 var resultString = SendAsync(httpClient, request);
 
-                var result = JsonConvert.DeserializeObject<WordInfoTempDomain>(resultString) as T;
+                var result = JsonConvert.DeserializeObject<T>(resultString);
 
                 return result;
             }

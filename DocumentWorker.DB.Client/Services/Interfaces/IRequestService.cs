@@ -11,8 +11,8 @@ namespace DocumentWorker.APIDB.Client.Services.Interfaces
     public interface IRequestService<T> where T : IBaseEntity
     {
         public string ControllerName { get; }
-        public bool AddRequest(T wordInfoDomain);
-        public bool AddRangeRequest(List<T> wordInfoDomain);
+        public bool AddRequest(T model);
+        public bool AddRangeRequest(List<T> model);
         public T GetRequest(int id);
     }
 }

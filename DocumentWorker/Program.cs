@@ -31,10 +31,11 @@ namespace DocumentWorker
             string apiDBUrl = Startup.Configuration.GetValue<string>("APIDB:Url");
             var wordProcessingService = Startup.ApplicationContainer.Resolve<WordProcessingService>();
             FileInfo fileInfo = new FileInfo(TxtFilesFolderPath + "ForRead.txt");
-            var dict = wordProcessingService.GetWords(fileInfo);
-            List<WordInfoTempDomain> wordInfoTemps = dict.Select(x => new WordInfoTempDomain { Name = x.Key, Count = x.Value.CountWordInText }).ToList();
 
             WordInfoTempRequestService<WordInfoTempDomain> wordInfoTempRequestService = new WordInfoTempRequestService<WordInfoTempDomain>(apiDBUrl);
+
+            var dict = wordProcessingService.GetWords(fileInfo);
+            List<WordInfoTempDomain> wordInfoTemps = dict.Select(x => new WordInfoTempDomain { Name = x.Key, Count = x.Value.CountWordInText }).ToList();
 
             var request = wordInfoTempRequestService.AddRangeRequest(wordInfoTemps);
         }
